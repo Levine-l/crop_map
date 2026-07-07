@@ -116,6 +116,7 @@
         <h2>Crop-profile zones give spatial context to SAR added value</h2>
         <p>
           The k=3 crop-profile solution is used for interpretation because it separates meaningful agricultural profiles while keeping enough test samples per zone.
+          Zone sample counts are held-out CROME test samples assigned to each crop-profile zone; grid-cell counts are reported separately.
           Positive SAR-related disagreement reduction appears in all three zones.
         </p>
       </div>
@@ -138,15 +139,16 @@
         <h2>Crop-profile maps from folder 6</h2>
         <p>
           These embedded maps reuse the completed folder 6 outputs. For final dissertation screenshots,
-          the k=3 cluster map and selected-crop intensity map are the strongest candidates.
+          the k=3 cluster map and selected-crop proportion map are the strongest candidates.
         </p>
       </div>
       <article class="map-shell">
         <div class="map-tabs" role="tablist" aria-label="Map choices">
           <button class="tab-button is-active" data-map="cluster" type="button">k=3 zones</button>
-          <button class="tab-button" data-map="intensity" type="button">Crop intensity</button>
+          <button class="tab-button" data-map="intensity" type="button">Crop proportion</button>
           <button class="tab-button" data-map="sar" type="button">SAR reduction</button>
         </div>
+        <div id="map-note" class="map-note" aria-live="polite"></div>
         <iframe
           id="map-frame"
           title="Crop-profile map preview"

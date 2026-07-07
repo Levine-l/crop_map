@@ -173,9 +173,18 @@ main {
   border-bottom: 1px solid var(--line);
 }
 
+.map-section {
+  grid-template-columns: 1fr;
+}
+
 .section-copy {
   position: sticky;
   top: 78px;
+}
+
+.map-section .section-copy {
+  position: static;
+  max-width: 860px;
 }
 
 .section-copy p:not(.section-kicker) {
@@ -324,10 +333,39 @@ th.numeric {
   border-color: var(--field-dark);
 }
 
+.map-note {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #fbfcfa;
+}
+
+.map-note h3 {
+  margin-bottom: 6px;
+}
+
+.map-note p,
+.map-note ul {
+  color: var(--muted);
+}
+
+.map-note p {
+  margin-bottom: 8px;
+}
+
+.map-note ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+.map-note li + li {
+  margin-top: 4px;
+}
+
 #map-frame {
   display: block;
   width: 100%;
-  height: 620px;
+  height: 760px;
   border: 0;
   background: #edf1ef;
 }

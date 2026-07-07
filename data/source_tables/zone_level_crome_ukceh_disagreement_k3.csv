@@ -1,4 +1,4 @@
 cluster_id,cluster_label,n_ukceh_labelled_samples,crome_ukceh_disagreement_rate
-1.0,winter wheat 36%; winter barley 17%; beet sugar beet   fodder beet 12%,462,0.11904761904761904
-2.0,winter barley 26%; winter wheat 19%; spring barley 16%,198,0.11616161616161616
-3.0,winter wheat 53%; winter barley 11%; spring barley 8%,772,0.11139896373056994
+1.0,Zone 1: Mixed wheat-barley-beet zone (winter wheat 36%; winter barley 17%; beet 12%),462,0.11904761904761904
+2.0,Zone 2: Barley oriented mixed zone (winter barley 26%; winter wheat 19%; spring barley 16%),198,0.11616161616161616
+3.0,Zone 3: Winter wheat dominant zone (winter wheat 53%; winter barley 11%; spring barley 8%),772,0.11139896373056994

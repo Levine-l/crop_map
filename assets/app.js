@@ -30,7 +30,7 @@ const DATA = {
   zones: [
     {
       zone: "Zone 1",
-      label: "Mixed wheat-barley-beet",
+      label: "Mixed wheat-barley-beet zone",
       profile: "Winter wheat 36%; winter barley 17%; beet 12%",
       cells: 46,
       samples: 561,
@@ -41,7 +41,7 @@ const DATA = {
     },
     {
       zone: "Zone 2",
-      label: "Barley and spring barley",
+      label: "Barley oriented mixed zone",
       profile: "Winter barley 26%; winter wheat 19%; spring barley 16%",
       cells: 20,
       samples: 255,
@@ -52,7 +52,7 @@ const DATA = {
     },
     {
       zone: "Zone 3",
-      label: "Winter-wheat dominant",
+      label: "Winter wheat dominant zone",
       profile: "Winter wheat 53%; winter barley 11%; spring barley 8%",
       cells: 78,
       samples: 901,
@@ -67,6 +67,34 @@ const DATA = {
     { run: "Main text", k: 3, silhouette: 0.312, samples: "255 / 901", sarRange: "0.068-0.084", interpretation: "Chosen for interpretable crop-profile zones." },
     { run: "Sensitivity", k: 4, silhouette: 0.261, samples: "255 / 575", sarRange: "0.061-0.084", interpretation: "More fragmented and lower silhouette." }
   ]
+};
+
+const MAP_NOTES = {
+  cluster: {
+    title: "k=3 crop-profile zones",
+    body: "Each polygon is a retained 10 km crop-profile grid cell, coloured by KMeans cluster over selected-crop proportions. Zone names are interpreted from centroid crop shares.",
+    details: [
+      "Zone 1: Mixed wheat-barley-beet zone - 46 retained grid cells; 561 held-out CROME test samples; centroid: winter wheat 36%, winter barley 17%, beet 12%; SAR disagreement reduction 0.084.",
+      "Zone 2: Barley oriented mixed zone - 20 retained grid cells; 255 held-out CROME test samples; centroid: winter barley 26%, winter wheat 19%, spring barley 16%; SAR disagreement reduction 0.071.",
+      "Zone 3: Winter wheat dominant zone - 78 retained grid cells; 901 held-out CROME test samples; centroid: winter wheat 53%, winter barley 11%, spring barley 8%; SAR disagreement reduction 0.068."
+    ]
+  },
+  intensity: {
+    title: "Selected crop proportion",
+    body: "This map shows selected_crop_intensity: selected crop area divided by total grid-cell area. Units are proportions of grid-cell area from 0 to 1; multiply by 100 for percent.",
+    details: [
+      "Selected crop area is the combined UKCEH area, in hectares, for the eight analysed crops: winter wheat, winter barley, spring barley, beet, maize, oilseed rape, potatoes, and pulses/field beans/peas.",
+      "The tooltip reports both selected_crop_area_ha and selected_crop_intensity so area and proportion are not conflated."
+    ]
+  },
+  sar: {
+    title: "Zone-level SAR disagreement reduction",
+    body: "This map joins the zone-level reduction in model-reference disagreement after adding Sentinel-1 SAR to every grid cell in that zone. Units are rate-point differences: S2 disagreement rate minus S1+S2 disagreement rate.",
+    details: [
+      "n_test_samples is the number of held-out CROME test samples in the zone, not the number of grid cells.",
+      "Zone reductions: Zone 1 = 0.084, Zone 2 = 0.071, Zone 3 = 0.068."
+    ]
+  }
 };
 
 const COLORS = {
@@ -214,7 +242,7 @@ function renderRangeChart() {
   data.forEach((d, i) => {
     const y = margin.top + i * rowH + rowH / 2;
     add(svg, "text", { x: margin.left - 14, y: y + 4, "text-anchor": "end", class: "chart-label" }, d.metric);
-    add(svg, "line", { x1: x(d.min), y1: y, x2: x(d.max), y2: y, stroke: COLORS.radar, "stroke-width": 6, "stroke-linecap": "round" });
+    add(svg, "line", { x1: x(d.min), y1: y, x2: x(d.max), y2: y, stroke: COLORS.s1s2, "stroke-width": 6, "stroke-linecap": "round" });
     add(svg, "circle", { cx: x(d.mean), cy: y, r: 8, fill: COLORS.gold, stroke: "#ffffff", "stroke-width": 2 });
     add(svg, "text", { x: x(d.max) + 10, y: y + 4, class: "chart-label" }, `mean +${fmt(d.mean)}`);
   });
@@ -256,6 +284,7 @@ function renderZoneChart() {
     add(svg, "text", { x: cx, y: y(Math.max(d.s2Dis, d.s1s2Dis)) - 18, "text-anchor": "middle", class: "chart-label" }, `-${fmt(d.reduction)}`);
     add(svg, "text", { x: cx, y: height - margin.bottom + 28, "text-anchor": "middle", class: "chart-label" }, d.zone);
     add(svg, "text", { x: cx, y: height - margin.bottom + 46, "text-anchor": "middle", class: "chart-title-small" }, d.label);
+    add(svg, "text", { x: cx, y: height - margin.bottom + 62, "text-anchor": "middle", class: "chart-title-small" }, `${d.samples} test samples`);
   });
 
   addLegend(svg, width - 200, 20, [
@@ -295,16 +324,33 @@ function renderKTable() {
 
 function setupMapTabs() {
   const frame = document.getElementById("map-frame");
+  const note = document.getElementById("map-note");
   const mapPaths = {
     cluster: "data/maps/crop_profile_cluster_map_k3.html",
     intensity: "data/maps/selected_crop_intensity_map_k3.html",
     sar: "data/maps/zone_level_sar_reduction_map_k3.html"
   };
+
+  function renderMapNote(key) {
+    if (!note || !MAP_NOTES[key]) return;
+    const item = MAP_NOTES[key];
+    note.innerHTML = `
+      <h3>${item.title}</h3>
+      <p>${item.body}</p>
+      <ul>
+        ${item.details.map(detail => `<li>${detail}</li>`).join("")}
+      </ul>
+    `;
+  }
+
+  renderMapNote("cluster");
+
   document.querySelectorAll(".tab-button").forEach(button => {
     button.addEventListener("click", () => {
       document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("is-active"));
       button.classList.add("is-active");
       frame.src = mapPaths[button.dataset.map];
+      renderMapNote(button.dataset.map);
     });
   });
 }
