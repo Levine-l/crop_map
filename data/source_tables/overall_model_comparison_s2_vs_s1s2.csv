@@ -1,0 +1,5 @@
+metric,s2_only,s1s2,delta,interpretation_note
+overall_agreement,0.7167730702263494,0.7910621009866512,0.0742890307603018,higher agreement with CROME labels
+balanced_accuracy,0.7163263620260113,0.7911457645981781,0.0748194025721668,higher agreement with CROME labels
+macro_f1,0.7171560563942653,0.7916214835192474,0.07446542712498216,higher agreement with CROME labels
+weighted_f1,0.7174154888835461,0.7915479377680644,0.07413244888451831,higher agreement with CROME labels

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dissertation Visualisation Suite</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="eyebrow">CASA Dissertation Figure Suite</p>
+      <h1>Sentinel-1 Added Value for Crop-Type Classification</h1>
+      <p class="lede">
+        HTML-first dissertation graphics for the 2022 East Anglia CROME reference-product workflow.
+        Metrics are interpreted as agreement with held-out CROME labels or UKCEH benchmark labels, not independent ground-truth accuracy.
+      </p>
+      <div class="metric-strip" aria-label="Key result summary">
+        <div>
+          <span class="metric-value">+0.074</span>
+          <span class="metric-label">Macro-F1 gain against CROME</span>
+        </div>
+        <div>
+          <span class="metric-value">36/36</span>
+          <span class="metric-label">RF settings improved by S1+S2</span>
+        </div>
+        <div>
+          <span class="metric-value">+0.070</span>
+          <span class="metric-label">Overall UKCEH benchmark gain</span>
+        </div>
+        <div>
+          <span class="metric-value">3 zones</span>
+          <span class="metric-label">Crop-profile geography summary</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="section-nav" aria-label="Figure sections">
+      <a href="#model-comparison">Model Comparison</a>
+      <a href="#class-gains">Class-Level Gains</a>
+      <a href="#robustness">Robustness</a>
+      <a href="#crop-profile">Crop-Profile Geography</a>
+      <a href="#maps">Maps</a>
+      <a href="#inventory">Figure Inventory</a>
+    </nav>
+
+    <section id="model-comparison" class="figure-section">
+      <div class="section-copy">
+        <p class="section-kicker">Figure candidate 5.4</p>
+        <h2>Overall agreement improves after adding Sentinel-1 SAR</h2>
+        <p>
+          The fused Sentinel-1 plus Sentinel-2 model improves all four headline metrics against held-out CROME labels.
+          This should be described as model-reference agreement, not field-survey accuracy.
+        </p>
+      </div>
+      <article class="viz-card">
+        <div class="card-heading">
+          <h3>Overall model comparison against CROME</h3>
+          <button class="icon-button" data-download-svg="overall-chart" title="Download SVG">SVG</button>
+        </div>
+        <div id="overall-chart" class="chart-frame" role="img" aria-label="Grouped bar chart comparing Sentinel-2-only and Sentinel-1 plus Sentinel-2 metrics"></div>
+      </article>
+      <article class="viz-card split-card">
+        <div>
+          <h3>Secondary UKCEH benchmark</h3>
+          <p>
+            The same direction of improvement appears when frozen model predictions are compared with harmonised UKCEH labels.
+            UKCEH remains a secondary benchmark, not absolute ground truth.
+          </p>
+        </div>
+        <div id="ukceh-chart" class="mini-chart" role="img" aria-label="UKCEH benchmark agreement comparison"></div>
+      </article>
+    </section>
+
+    <section id="class-gains" class="figure-section">
+      <div class="section-copy">
+        <p class="section-kicker">Figure candidate 5.6</p>
+        <h2>Largest gains occur in weaker optical-only classes</h2>
+        <p>
+          Pulses, potatoes, maize and oilseed rape show the largest F1 improvements after SAR is added.
+          The chart is sorted by F1 gain to foreground added value rather than baseline strength.
+        </p>
+      </div>
+      <article class="viz-card">
+        <div class="card-heading">
+          <h3>Class-level F1 change: S1+S2 minus S2-only</h3>
+          <button class="icon-button" data-download-svg="class-gain-chart" title="Download SVG">SVG</button>
+        </div>
+        <div id="class-gain-chart" class="chart-frame tall" role="img" aria-label="Horizontal bar chart of class-level F1 gains"></div>
+      </article>
+    </section>
+
+    <section id="robustness" class="figure-section">
+      <div class="section-copy">
+        <p class="section-kicker">Figure candidate 5.9</p>
+        <h2>The SAR result is stable across Random Forest settings</h2>
+        <p>
+          A 36-setting sensitivity check found the S1+S2 model ahead of the S2-only model for every tested paired configuration.
+          The range bars show the spread of gains rather than a single tuned model.
+        </p>
+      </div>
+      <article class="viz-card">
+        <div class="card-heading">
+          <h3>RF sensitivity: gain range across 36 paired settings</h3>
+          <button class="icon-button" data-download-svg="rf-chart" title="Download SVG">SVG</button>
+        </div>
+        <div id="rf-chart" class="chart-frame compact" role="img" aria-label="Range chart for Random Forest sensitivity gains"></div>
+      </article>
+    </section>
+
+    <section id="crop-profile" class="figure-section">
+      <div class="section-copy">
+        <p class="section-kicker">Figure candidate 5.10</p>
+        <h2>Crop-profile zones give spatial context to SAR added value</h2>
+        <p>
+          The k=3 crop-profile solution is used for interpretation because it separates meaningful agricultural profiles while keeping enough test samples per zone.
+          Positive SAR-related disagreement reduction appears in all three zones.
+        </p>
+      </div>
+      <article class="viz-card">
+        <div class="card-heading">
+          <h3>Zone-level disagreement reduction</h3>
+          <button class="icon-button" data-download-svg="zone-chart" title="Download SVG">SVG</button>
+        </div>
+        <div id="zone-chart" class="chart-frame compact" role="img" aria-label="Zone-level SAR disagreement reduction chart"></div>
+      </article>
+      <article class="table-card">
+        <h3>Clustering sensitivity summary</h3>
+        <div id="k-table" class="data-table"></div>
+      </article>
+    </section>
+
+    <section id="maps" class="map-section">
+      <div class="section-copy">
+        <p class="section-kicker">Interactive appendix figures</p>
+        <h2>Crop-profile maps from folder 6</h2>
+        <p>
+          These embedded maps reuse the completed folder 6 outputs. For final dissertation screenshots,
+          the k=3 cluster map and selected-crop intensity map are the strongest candidates.
+        </p>
+      </div>
+      <article class="map-shell">
+        <div class="map-tabs" role="tablist" aria-label="Map choices">
+          <button class="tab-button is-active" data-map="cluster" type="button">k=3 zones</button>
+          <button class="tab-button" data-map="intensity" type="button">Crop intensity</button>
+          <button class="tab-button" data-map="sar" type="button">SAR reduction</button>
+        </div>
+        <iframe
+          id="map-frame"
+          title="Crop-profile map preview"
+          src="data/maps/crop_profile_cluster_map_k3.html">
+        </iframe>
+      </article>
+    </section>
+
+    <section id="inventory" class="inventory-section">
+      <div class="section-copy">
+        <p class="section-kicker">Working inventory</p>
+        <h2>Recommended figure pathway</h2>
+      </div>
+      <div class="inventory-grid">
+        <div class="inventory-item">
+          <h3>Main Results</h3>
+          <p>Overall model comparison, class-level F1 gains, and CROME confusion matrices.</p>
+        </div>
+        <div class="inventory-item">
+          <h3>Robustness</h3>
+          <p>RF sensitivity range plot plus a short table stating 36/36 paired settings improved.</p>
+        </div>
+        <div class="inventory-item">
+          <h3>Spatial Extension</h3>
+          <p>k=3 crop-profile cluster map, zone-level SAR reduction chart, and k sensitivity table.</p>
+        </div>
+        <div class="inventory-item">
+          <h3>Appendix</h3>
+          <p>Full Folium maps, k=2/k=4 alternatives, feature importance, and full confusion matrices.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Data sources: CROME 2022 reference crop-map product, Sentinel-1/Sentinel-2 time-series features, and UKCEH Land Cover plus: Crops 2022 secondary benchmark.</p>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

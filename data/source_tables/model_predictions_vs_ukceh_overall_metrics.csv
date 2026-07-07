@@ -1,0 +1,3 @@
+model,benchmark,rows_used,overall_benchmark_agreement,balanced_benchmark_agreement,macro_f1_against_benchmark,weighted_f1_against_benchmark,benchmark_note,delta_vs_s2
+S2-only prediction,UKCEH Land Cover plus: Crops 2022 harmonised 8-class label,1437,0.7738343771746694,0.7708738198263598,0.7652750163597617,0.7760232639454274,"UKCEH Land Cover plus: Crops treated as a high-quality secondary benchmark / reference product, not absolute field-survey ground truth",0.0
+S1+S2 prediction,UKCEH Land Cover plus: Crops 2022 harmonised 8-class label,1437,0.8434237995824635,0.8424763641687456,0.8372960536841852,0.8445141342943769,"UKCEH Land Cover plus: Crops treated as a high-quality secondary benchmark / reference product, not absolute field-survey ground truth",0.06958942240779409
