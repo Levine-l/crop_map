@@ -39,28 +39,6 @@ a:hover {
   text-decoration: underline;
 }
 
-.site-header {
-  background: #e8ede6;
-  border-bottom: 1px solid var(--line);
-}
-
-.header-inner {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 48px 24px 34px;
-}
-
-.eyebrow,
-.section-kicker {
-  margin: 0 0 8px;
-  font-size: 12px;
-  line-height: 1.2;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  color: var(--field-dark);
-  font-weight: 700;
-}
-
 h1,
 h2,
 h3,
@@ -88,41 +66,6 @@ h3 {
   line-height: 1.25;
   letter-spacing: 0;
   margin-bottom: 8px;
-}
-
-.lede {
-  max-width: 860px;
-  color: #3d4851;
-  font-size: 17px;
-  margin-bottom: 28px;
-}
-
-.metric-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.metric-strip > div {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(127, 143, 128, 0.28);
-  border-radius: 6px;
-  padding: 14px 16px;
-}
-
-.metric-value {
-  display: block;
-  font-weight: 800;
-  font-size: 25px;
-  line-height: 1.1;
-  color: var(--field-dark);
-}
-
-.metric-label {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 13px;
 }
 
 main {
@@ -163,8 +106,7 @@ main {
 }
 
 .figure-section,
-.map-section,
-.inventory-section {
+.map-section {
   display: grid;
   grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
   gap: 24px;
@@ -187,14 +129,18 @@ main {
   max-width: 860px;
 }
 
-.section-copy p:not(.section-kicker) {
+.section-copy p {
   color: var(--muted);
+}
+
+.figure-section > .viz-card,
+.figure-section > .table-card {
+  grid-column: 2;
 }
 
 .viz-card,
 .table-card,
-.map-shell,
-.inventory-item {
+.map-shell {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -207,13 +153,6 @@ main {
   margin-bottom: 18px;
 }
 
-.split-card {
-  display: grid;
-  grid-template-columns: minmax(220px, 0.9fr) minmax(220px, 1fr);
-  gap: 18px;
-  align-items: center;
-}
-
 .card-heading {
   display: flex;
   align-items: center;
@@ -222,7 +161,6 @@ main {
   margin-bottom: 12px;
 }
 
-.icon-button,
 .tab-button {
   border: 1px solid var(--line);
   background: #f8faf8;
@@ -233,13 +171,6 @@ main {
   min-height: 34px;
 }
 
-.icon-button {
-  min-width: 46px;
-  padding: 6px 10px;
-  font-size: 12px;
-}
-
-.icon-button:hover,
 .tab-button:hover {
   border-color: var(--radar);
 }
@@ -255,10 +186,6 @@ main {
 
 .chart-frame.compact {
   min-height: 310px;
-}
-
-.mini-chart {
-  min-height: 230px;
 }
 
 .chart-axis,
@@ -370,21 +297,6 @@ th.numeric {
   background: #edf1ef;
 }
 
-.inventory-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.inventory-item {
-  padding: 18px;
-}
-
-.inventory-item p {
-  color: var(--muted);
-  margin-bottom: 0;
-}
-
 .site-footer {
   max-width: 1180px;
   margin: 0 auto;
@@ -394,17 +306,18 @@ th.numeric {
 }
 
 @media (max-width: 900px) {
-  .metric-strip,
   .figure-section,
-  .map-section,
-  .inventory-section,
-  .split-card,
-  .inventory-grid {
+  .map-section {
     grid-template-columns: 1fr;
   }
 
   .section-copy {
     position: static;
+  }
+
+  .figure-section > .viz-card,
+  .figure-section > .table-card {
+    grid-column: auto;
   }
 
   .section-nav {
@@ -417,14 +330,9 @@ th.numeric {
 }
 
 @media (max-width: 560px) {
-  .header-inner,
   main {
     padding-left: 16px;
     padding-right: 16px;
-  }
-
-  .metric-strip {
-    gap: 8px;
   }
 
   .chart-frame {

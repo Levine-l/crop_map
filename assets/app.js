@@ -64,7 +64,7 @@ const DATA = {
   ],
   kSummary: [
     { run: "Automatic", k: 2, silhouette: 0.412, samples: "688 / 1029", sarRange: "0.071-0.075", interpretation: "Best silhouette, but coarse agricultural interpretation." },
-    { run: "Main text", k: 3, silhouette: 0.312, samples: "255 / 901", sarRange: "0.068-0.084", interpretation: "Chosen for interpretable crop-profile zones." },
+    { run: "Main text", k: 3, silhouette: 0.312, samples: "255 / 901", sarRange: "0.068-0.084", interpretation: "Chosen for interpretable crop profile zones." },
     { run: "Sensitivity", k: 4, silhouette: 0.261, samples: "255 / 575", sarRange: "0.061-0.084", interpretation: "More fragmented and lower silhouette." }
   ]
 };
@@ -72,11 +72,9 @@ const DATA = {
 const MAP_NOTES = {
   cluster: {
     title: "k=3 crop-profile zones",
-    body: "Each polygon is a retained 10 km crop-profile grid cell, coloured by KMeans cluster over selected-crop proportions. Zone names are interpreted from centroid crop shares.",
+    body: "Each polygon is a retained 10 km crop-profile grid cell, coloured by KMeans cluster over selected-crop proportions.",
     details: [
-      "Zone 1: Mixed wheat-barley-beet zone - 46 retained grid cells; 561 held-out CROME test samples; centroid: winter wheat 36%, winter barley 17%, beet 12%; SAR disagreement reduction 0.084.",
-      "Zone 2: Barley oriented mixed zone - 20 retained grid cells; 255 held-out CROME test samples; centroid: winter barley 26%, winter wheat 19%, spring barley 16%; SAR disagreement reduction 0.071.",
-      "Zone 3: Winter wheat dominant zone - 78 retained grid cells; 901 held-out CROME test samples; centroid: winter wheat 53%, winter barley 11%, spring barley 8%; SAR disagreement reduction 0.068."
+      "Zone definitions and sample counts are summarised in the fixed table above."
     ]
   },
   intensity: {
@@ -91,8 +89,7 @@ const MAP_NOTES = {
     title: "Zone-level SAR disagreement reduction",
     body: "This map joins the zone-level reduction in model-reference disagreement after adding Sentinel-1 SAR to every grid cell in that zone. Units are rate-point differences: S2 disagreement rate minus S1+S2 disagreement rate.",
     details: [
-      "n_test_samples is the number of held-out CROME test samples in the zone, not the number of grid cells.",
-      "Zone reductions: Zone 1 = 0.084, Zone 2 = 0.071, Zone 3 = 0.068."
+      "Zone sample counts are held-out CROME test samples, not grid-cell counts."
     ]
   }
 };
@@ -256,7 +253,7 @@ function renderZoneChart() {
   const data = DATA.zones;
   const width = 880;
   const height = 310;
-  const margin = { top: 30, right: 30, bottom: 70, left: 72 };
+  const margin = { top: 30, right: 30, bottom: 50, left: 72 };
   const svg = createSvg(width, height);
   target.appendChild(svg);
 
@@ -283,14 +280,42 @@ function renderZoneChart() {
     add(svg, "line", { x1: s2X + barW / 2, y1: y(d.s2Dis) - 8, x2: s1X + barW / 2, y2: y(d.s1s2Dis) - 8, stroke: COLORS.gain, "stroke-width": 2 });
     add(svg, "text", { x: cx, y: y(Math.max(d.s2Dis, d.s1s2Dis)) - 18, "text-anchor": "middle", class: "chart-label" }, `-${fmt(d.reduction)}`);
     add(svg, "text", { x: cx, y: height - margin.bottom + 28, "text-anchor": "middle", class: "chart-label" }, d.zone);
-    add(svg, "text", { x: cx, y: height - margin.bottom + 46, "text-anchor": "middle", class: "chart-title-small" }, d.label);
-    add(svg, "text", { x: cx, y: height - margin.bottom + 62, "text-anchor": "middle", class: "chart-title-small" }, `${d.samples} test samples`);
   });
 
   addLegend(svg, width - 200, 20, [
     { label: "S2 disagreement", color: COLORS.s2 },
     { label: "S1+S2 disagreement", color: COLORS.s1s2 }
   ]);
+}
+
+function renderZoneSummaryTable() {
+  const target = document.getElementById("zone-summary-table");
+  if (!target) return;
+  const rows = DATA.zones.map(row => `
+    <tr>
+      <td>${row.zone}</td>
+      <td>${row.label}</td>
+      <td>${row.profile}</td>
+      <td class="numeric">${row.cells}</td>
+      <td class="numeric">${row.samples}</td>
+      <td class="numeric">${fmt(row.reduction)}</td>
+    </tr>
+  `).join("");
+  target.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Zone</th>
+          <th>Meaning</th>
+          <th>Centroid crop profile</th>
+          <th class="numeric">Grid cells</th>
+          <th class="numeric">Test samples</th>
+          <th class="numeric">SAR reduction</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
 
 function renderKTable() {
@@ -355,31 +380,11 @@ function setupMapTabs() {
   });
 }
 
-function setupDownloads() {
-  document.querySelectorAll("[data-download-svg]").forEach(button => {
-    button.addEventListener("click", () => {
-      const id = button.getAttribute("data-download-svg");
-      const svg = document.querySelector(`#${id} svg`);
-      if (!svg) return;
-      const clone = svg.cloneNode(true);
-      clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-      const blob = new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `${id}.svg`;
-      document.body.appendChild(link);
-      link.click();
-      URL.revokeObjectURL(link.href);
-      link.remove();
-    });
-  });
-}
-
 renderGroupedBars("overall-chart", DATA.overall, { yMin: 0.68, yMax: 0.82, height: 360 });
-renderGroupedBars("ukceh-chart", DATA.ukceh, { yMin: 0.74, yMax: 0.86, height: 250, width: 560 });
+renderGroupedBars("ukceh-chart", DATA.ukceh, { yMin: 0.74, yMax: 0.86, height: 360 });
 renderHorizontalGains();
 renderRangeChart();
 renderZoneChart();
+renderZoneSummaryTable();
 renderKTable();
 setupMapTabs();
-setupDownloads();
