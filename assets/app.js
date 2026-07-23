@@ -1,3 +1,5 @@
+const GEE_APP_URL = "https://casa0025wk6.projects.earthengine.app/view/crop-profile-sar-explorer";
+
 const DATA = {
   overall: [
     { metric: "Overall agreement", s2: 0.7168, s1s2: 0.7911 },
@@ -380,6 +382,29 @@ function setupMapTabs() {
   });
 }
 
+function setupGeeApp() {
+  if (!GEE_APP_URL) return;
+
+  let url;
+  try {
+    url = new URL(GEE_APP_URL);
+  } catch {
+    return;
+  }
+  if (url.protocol !== "https:") return;
+
+  const section = document.getElementById("gee-app");
+  const navLink = document.getElementById("gee-nav-link");
+  const appLink = document.getElementById("gee-app-link");
+  const frame = document.getElementById("gee-app-frame");
+  if (!section || !navLink || !appLink || !frame) return;
+
+  section.hidden = false;
+  navLink.hidden = false;
+  appLink.href = url.href;
+  frame.src = url.href;
+}
+
 renderGroupedBars("overall-chart", DATA.overall, { yMin: 0.68, yMax: 0.82, height: 360 });
 renderGroupedBars("ukceh-chart", DATA.ukceh, { yMin: 0.74, yMax: 0.86, height: 360 });
 renderHorizontalGains();
@@ -388,3 +413,4 @@ renderZoneChart();
 renderZoneSummaryTable();
 renderKTable();
 setupMapTabs();
+setupGeeApp();

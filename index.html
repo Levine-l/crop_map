@@ -14,6 +14,7 @@
       <a href="#robustness">Robustness</a>
       <a href="#crop-profile">Geography Crop Profile</a>
       <a href="#maps">Maps</a>
+      <a id="gee-nav-link" href="#gee-app" hidden>Interactive GEE App</a>
     </nav>
 
     <section id="model-comparison" class="figure-section">
@@ -100,7 +101,7 @@
       <div class="section-copy">
         <h2>Crop profile map previews</h2>
         <p>
-          The map previews show the three crop profile zones, the proportion of each crop in each zone, and the SAR disagreement reduction in each zone.
+          The map previews show the three crop-profile zones, selected-crop area as a proportion of each grid cell, and zone-level SAR disagreement reduction.
         </p>
       </div>
       <article class="map-shell">
@@ -114,6 +115,30 @@
           id="map-frame"
           title="Crop-profile map preview"
           src="data/maps/crop_profile_cluster_map_k3.html">
+        </iframe>
+      </article>
+    </section>
+
+    <section id="gee-app" class="map-section" hidden>
+      <div class="section-copy">
+        <h2>Interactive crop-profile explorer</h2>
+        <p>
+          Explore crop-profile zones, selected-crop proportions and SAR disagreement reduction in one map.
+          Click a retained 10 km grid cell to connect its crop composition with the zone-level model results and sample support.
+        </p>
+      </div>
+      <article class="map-shell">
+        <div class="gee-app-toolbar">
+          <p>
+            Values describe agreement with reference crop-map products, not independent ground-truth accuracy.
+          </p>
+          <a id="gee-app-link" href="#" target="_blank" rel="noopener">Open the GEE App in a new tab</a>
+        </div>
+        <iframe
+          id="gee-app-frame"
+          title="Interactive crop-profile and SAR added-value explorer"
+          loading="lazy"
+          allowfullscreen>
         </iframe>
       </article>
     </section>
