@@ -21,23 +21,38 @@
       <div class="section-copy">
         <h2>Overall agreement improves after adding Sentinel-1 SAR</h2>
         <p>
-          The Sentinel-1 plus Sentinel-2 model improves all four headline metrics against held out CROME labels.
+          Agreement is evaluated against held out CROME crop map labels. Across all four metrics,
+          adding Sentinel-1 increases the score by about 0.074.
         </p>
       </div>
       <article class="viz-card">
         <div class="card-heading">
           <h3>Overall model comparison against CROME</h3>
         </div>
-        <div id="overall-chart" class="chart-frame" role="img" aria-label="Grouped bar chart comparing Sentinel-2-only and Sentinel-1 plus Sentinel-2 metrics"></div>
+        <p class="figure-definition">
+          <strong>Measures.</strong> Overall agreement is the share of all matching labels; balanced accuracy
+          averages recall across crop classes; Macro F1 gives each class equal weight; Weighted F1 weights classes by sample size.
+          All scores range from 0 to 1.
+        </p>
+        <div id="overall-chart" class="chart-frame" role="img" aria-label="Grouped bar chart comparing Sentinel-2 only and Sentinel-1 plus Sentinel-2 metrics"></div>
+        <p class="figure-reading">
+          <strong>Main reading.</strong> The gain is consistent across total, class balanced and F1 based measures,
+          rather than being driven by a single headline metric.
+        </p>
       </article>
       <article class="viz-card">
         <div class="card-heading">
-          <h3>UKCEH</h3>
+          <h3>Secondary comparison against UKCEH crop labels</h3>
         </div>
-        <p>
-          The same direction of improvement appears when frozen model predictions are compared with harmonised UKCEH labels.
+        <p class="figure-definition">
+          <strong>Measure.</strong> The frozen CROME trained predictions are compared with harmonised UKCEH labels.
+          These are agreement scores against a second crop map product, not independent ground truth accuracy.
         </p>
         <div id="ukceh-chart" class="chart-frame" role="img" aria-label="UKCEH benchmark agreement comparison"></div>
+        <p class="figure-reading">
+          <strong>Main reading.</strong> S1+S2 remains higher by about 0.070 across all four measures,
+          so the direction of improvement is not unique to the CROME comparison.
+        </p>
       </article>
     </section>
 
@@ -45,15 +60,23 @@
       <div class="section-copy">
         <h2>Largest gains occur in weaker optical only classes</h2>
         <p>
-          Pulses, potatoes, maize and oilseed rape show the largest F1 improvements after SAR is added.
-          The chart is sorted by F1 gain to foreground added value rather than baseline strength.
+          Some crops have less distinctive optical only signatures or greater within season similarity.
+          Pulses, potatoes, maize and oilseed rape therefore have more scope to benefit from SAR structure and timing information.
         </p>
       </div>
       <article class="viz-card">
         <div class="card-heading">
           <h3>Class level F1 change: S1+S2 minus S2 only</h3>
         </div>
-        <div id="class-gain-chart" class="chart-frame tall" role="img" aria-label="Horizontal bar chart of class-level F1 gains"></div>
+        <p class="figure-definition">
+          <strong>Measure.</strong> Bar length is the absolute increase in class F1 after adding Sentinel-1;
+          it is not the final F1 score. Crops are ordered from largest to smallest gain.
+        </p>
+        <div id="class-gain-chart" class="chart-frame tall" role="img" aria-label="Horizontal bar chart of class level F1 gains"></div>
+        <p class="figure-reading">
+          <strong>Main reading.</strong> Pulses gain 0.130 F1, while winter barley gains 0.024.
+          Sentinel-1 adds most value where the optical only classifier was comparatively weaker.
+        </p>
       </article>
     </section>
 
@@ -61,15 +84,24 @@
       <div class="section-copy">
         <h2>Robustness check: Random Forest sensitivity</h2>
         <p>
-          All 36 paired Random Forest settings improved after adding Sentinel-1.
-
+          The same training and test split was evaluated under 36 reasonable Random Forest settings.
+          This checks whether the SAR result depends on one particular model configuration.
         </p>
       </div>
       <article class="viz-card">
         <div class="card-heading">
           <h3>RF sensitivity: gain range across 36 paired settings</h3>
         </div>
+        <p class="figure-definition">
+          <strong>Settings.</strong> The grid varies tree count (300, 500, 800), feature sampling
+          (<code>sqrt</code>, <code>log2</code>), minimum leaf size (1, 3, 5) and class weighting.
+          Each line shows the minimum to maximum S1+S2 gain; the dot is the mean gain.
+        </p>
         <div id="rf-chart" class="chart-frame compact" role="img" aria-label="Range chart for Random Forest sensitivity gains"></div>
+        <p class="figure-reading">
+          <strong>Main reading.</strong> All 36 paired settings improve for both overall agreement and Macro F1.
+          The result supports robustness, not selection of a new best model.
+        </p>
       </article>
     </section>
 
@@ -77,23 +109,54 @@
       <div class="section-copy">
         <h2>SAR gains by crop profile zone</h2>
         <p>
-          Zones are grouped by UKCEH crop composition but not model performance.
-          Checks whether adding Sentinel-1 reduces model reference disagreement in each agricultural zone.
+          Zones are defined only from UKCEH crop composition, not from model performance.
+          The comparison then asks whether adding Sentinel-1 reduces disagreement between the model and reference in each agricultural context.
         </p>
       </div>
       <article class="viz-card">
         <div class="card-heading">
           <h3>Zone level disagreement reduction</h3>
         </div>
-        <div id="zone-chart" class="chart-frame compact" role="img" aria-label="Zone-level SAR disagreement reduction chart"></div>
+        <p class="figure-definition">
+          <strong>Measure.</strong> Disagreement is the proportion of held out CROME samples where the model and reference label differ.
+          SAR reduction is S2 only disagreement minus S1+S2 disagreement, in rate points.
+        </p>
+        <div id="zone-chart" class="chart-frame compact" role="img" aria-label="Zone level SAR disagreement reduction chart"></div>
+        <p class="figure-reading">
+          <strong>Main reading.</strong> Disagreement falls in all three zones, with the largest reduction
+          in the mixed wheat, barley and beet zone (0.084).
+        </p>
       </article>
       <article class="table-card">
         <h3>Clustering sensitivity summary</h3>
+        <p class="table-intro">
+          Silhouette measures cluster separation and compactness, with higher values preferred.
+          The sample column reports the smallest and largest zone level held out test counts.
+          Although k=2 has the highest silhouette, k=3 is retained because it gives a more informative agricultural interpretation without the fragmentation of k=4.
+        </p>
         <div id="k-table" class="data-table"></div>
       </article>
       <article class="table-card">
         <h3>Zone summary</h3>
+        <p class="table-intro">
+          Centroid profiles are shares of the eight selected crops, not shares of total grid cell area.
+          Grid cells describe spatial support; test samples are zone totals used for disagreement estimates.
+        </p>
         <div id="zone-summary-table" class="data-table"></div>
+      </article>
+      <article class="viz-card">
+        <div class="card-heading">
+          <h3>Complete crop composition of the three zones</h3>
+        </div>
+        <p class="figure-definition">
+          <strong>Measure.</strong> Each bar sums to 100% and shows the cluster centroid share of selected crop area
+          across all eight analysed crops.
+        </p>
+        <div id="zone-profile-chart" class="chart-frame zone-profile" role="img" aria-label="One hundred percent stacked bars comparing all eight crop shares across the three crop profile zones"></div>
+        <p class="figure-reading">
+          <strong>Main reading.</strong> Zone 1 is the most evenly mixed; Zone 2 shifts towards both barley types and beet;
+          Zone 3 is distinguished by winter wheat occupying more than half of selected crop area.
+        </p>
       </article>
     </section>
 
@@ -101,7 +164,7 @@
       <div class="section-copy">
         <h2>Crop profile map previews</h2>
         <p>
-          The map previews show the three crop-profile zones, selected-crop area as a proportion of each grid cell, and zone-level SAR disagreement reduction.
+          The map previews show the three crop profile zones, selected crop area as a proportion of each grid cell, and zone level SAR disagreement reduction.
         </p>
       </div>
       <article class="map-shell">
@@ -113,7 +176,7 @@
         <div id="map-note" class="map-note" aria-live="polite"></div>
         <iframe
           id="map-frame"
-          title="Crop-profile map preview"
+          title="Crop profile map preview"
           src="data/maps/crop_profile_cluster_map_k3.html">
         </iframe>
       </article>
@@ -121,22 +184,22 @@
 
     <section id="gee-app" class="map-section" hidden>
       <div class="section-copy">
-        <h2>Interactive crop-profile explorer</h2>
+        <h2>Interactive crop profile explorer</h2>
         <p>
-          Explore crop-profile zones, selected-crop proportions and SAR disagreement reduction in one map.
-          Click a retained 10 km grid cell to connect its crop composition with the zone-level model results and sample support.
+          Explore crop profile zones, selected crop proportions and SAR disagreement reduction in one map.
+          Click a retained 10 km grid cell to connect its crop composition with the zone level model results and sample support.
         </p>
       </div>
       <article class="map-shell">
         <div class="gee-app-toolbar">
           <p>
-            Values describe agreement with reference crop-map products, not independent ground-truth accuracy.
+            Values describe agreement with reference crop map products, not independent ground truth accuracy.
           </p>
           <a id="gee-app-link" href="#" target="_blank" rel="noopener">Open the GEE App in a new tab</a>
         </div>
         <iframe
           id="gee-app-frame"
-          title="Interactive crop-profile and SAR added-value explorer"
+          title="Interactive crop profile and SAR added value explorer"
           loading="lazy"
           allowfullscreen>
         </iframe>
@@ -145,7 +208,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>Data sources: CROME 2022 reference crop-map product, Sentinel-1/Sentinel-2 time-series features, and UKCEH Land Cover plus: Crops 2022 secondary benchmark.</p>
+    <p>Data sources: CROME 2022 reference crop map product, Sentinel-1/Sentinel-2 time series features, and UKCEH Land Cover plus: Crops 2022 secondary benchmark.</p>
   </footer>
 
   <script src="assets/app.js"></script>

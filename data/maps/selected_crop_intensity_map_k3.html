@@ -212,7 +212,7 @@
         .attr("class", "caption")
         .attr("y", 21)
         .attr("fill", "black")
-        .text("Selected crop proportion (selected crop area / grid area, 0-1)");
+        .text("Selected crop proportion (selected crop area / grid area, 0 to 1)");
     
             choropleth_c7b2fead26bd154b0d9720f47b68f4c0.addTo(map_50cf7f6b51d48b957f457bf2531dcb70);
         
@@ -259,7 +259,7 @@
         }
     }
     let fields = ["grid_id", "selected_crop_area_ha", "selected_crop_intensity", "cluster_id", "cluster_label"];
-    let aliases = ["Grid cell", "Selected crop area (ha)", "Selected crop proportion (0-1)", "Zone id", "Zone"];
+    let aliases = ["Grid cell", "Selected crop area (ha)", "Selected crop proportion (0 to 1)", "Zone id", "Zone"];
     let table = '<table>' +
         String(
         fields.map(

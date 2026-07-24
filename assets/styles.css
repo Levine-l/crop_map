@@ -141,6 +141,8 @@ main {
 .viz-card,
 .table-card,
 .map-shell {
+  min-width: 0;
+  max-width: 100%;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -177,7 +179,9 @@ main {
 
 .chart-frame {
   width: 100%;
+  max-width: 100%;
   min-height: 360px;
+  overflow: hidden;
 }
 
 .chart-frame.tall {
@@ -186,6 +190,10 @@ main {
 
 .chart-frame.compact {
   min-height: 310px;
+}
+
+.chart-frame.zone-profile {
+  min-height: 390px;
 }
 
 .chart-axis,
@@ -204,12 +212,24 @@ main {
   font-size: 12px;
 }
 
+.chart-label-strong {
+  font-weight: 700;
+}
+
+.segment-label {
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .legend text {
   fill: #34424c;
   font-size: 12px;
 }
 
 .data-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
 }
 
@@ -236,6 +256,39 @@ td.numeric,
 th.numeric {
   text-align: right;
   white-space: nowrap;
+}
+
+tbody tr.is-selected td {
+  background: #f2f6ef;
+  font-weight: 700;
+}
+
+.figure-definition,
+.figure-reading,
+.table-intro {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.figure-definition,
+.table-intro {
+  margin-bottom: 12px;
+}
+
+.figure-reading {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.figure-definition strong,
+.figure-reading strong,
+.table-intro strong {
+  color: var(--ink);
+}
+
+code {
+  font-size: 0.95em;
 }
 
 .map-shell {
@@ -338,7 +391,7 @@ th.numeric {
 @media (max-width: 900px) {
   .figure-section,
   .map-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .section-copy {
@@ -377,5 +430,14 @@ th.numeric {
 
   .chart-frame {
     min-height: 330px;
+  }
+
+  .chart-frame.zone-profile {
+    min-height: 360px;
+    overflow-x: auto;
+  }
+
+  .chart-frame.zone-profile svg {
+    min-width: 720px;
   }
 }

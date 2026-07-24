@@ -4,13 +4,13 @@ const DATA = {
   overall: [
     { metric: "Overall agreement", s2: 0.7168, s1s2: 0.7911 },
     { metric: "Balanced accuracy", s2: 0.7163, s1s2: 0.7911 },
-    { metric: "Macro-F1", s2: 0.7172, s1s2: 0.7916 },
+    { metric: "Macro F1", s2: 0.7172, s1s2: 0.7916 },
     { metric: "Weighted F1", s2: 0.7174, s1s2: 0.7915 }
   ],
   ukceh: [
     { metric: "Overall", s2: 0.7738, s1s2: 0.8434 },
     { metric: "Balanced", s2: 0.7709, s1s2: 0.8425 },
-    { metric: "Macro-F1", s2: 0.7653, s1s2: 0.8373 },
+    { metric: "Macro F1", s2: 0.7653, s1s2: 0.8373 },
     { metric: "Weighted F1", s2: 0.7760, s1s2: 0.8445 }
   ],
   classGains: [
@@ -26,14 +26,24 @@ const DATA = {
   rf: [
     { metric: "Overall agreement", mean: 0.080, min: 0.071, max: 0.088 },
     { metric: "Balanced accuracy", mean: 0.081, min: 0.072, max: 0.088 },
-    { metric: "Macro-F1", mean: 0.081, min: 0.071, max: 0.089 },
+    { metric: "Macro F1", mean: 0.081, min: 0.071, max: 0.089 },
     { metric: "Weighted F1", mean: 0.081, min: 0.071, max: 0.089 }
   ],
   zones: [
     {
       zone: "Zone 1",
-      label: "Mixed wheat-barley-beet zone",
+      label: "Mixed wheat, barley and beet zone",
       profile: "Winter wheat 36%; winter barley 17%; beet 12%",
+      composition: {
+        winterWheat: 0.3637,
+        winterBarley: 0.1689,
+        springBarley: 0.1138,
+        beet: 0.1158,
+        maize: 0.0528,
+        oilseedRape: 0.0764,
+        potatoes: 0.0524,
+        pulses: 0.0563
+      },
       cells: 46,
       samples: 561,
       s2Dis: 0.303,
@@ -45,6 +55,16 @@ const DATA = {
       zone: "Zone 2",
       label: "Barley oriented mixed zone",
       profile: "Winter barley 26%; winter wheat 19%; spring barley 16%",
+      composition: {
+        winterWheat: 0.1858,
+        winterBarley: 0.2558,
+        springBarley: 0.1577,
+        beet: 0.1461,
+        maize: 0.0643,
+        oilseedRape: 0.0467,
+        potatoes: 0.0903,
+        pulses: 0.0533
+      },
       cells: 20,
       samples: 255,
       s2Dis: 0.275,
@@ -56,6 +76,16 @@ const DATA = {
       zone: "Zone 3",
       label: "Winter wheat dominant zone",
       profile: "Winter wheat 53%; winter barley 11%; spring barley 8%",
+      composition: {
+        winterWheat: 0.5320,
+        winterBarley: 0.1063,
+        springBarley: 0.0819,
+        beet: 0.0654,
+        maize: 0.0287,
+        oilseedRape: 0.0765,
+        potatoes: 0.0296,
+        pulses: 0.0795
+      },
       cells: 78,
       samples: 901,
       s2Dis: 0.272,
@@ -65,33 +95,33 @@ const DATA = {
     }
   ],
   kSummary: [
-    { run: "Automatic", k: 2, silhouette: 0.412, samples: "688 / 1029", sarRange: "0.071-0.075", interpretation: "Best silhouette, but coarse agricultural interpretation." },
-    { run: "Main text", k: 3, silhouette: 0.312, samples: "255 / 901", sarRange: "0.068-0.084", interpretation: "Chosen for interpretable crop profile zones." },
-    { run: "Sensitivity", k: 4, silhouette: 0.261, samples: "255 / 575", sarRange: "0.061-0.084", interpretation: "More fragmented and lower silhouette." }
+    { run: "Automatic", k: 2, silhouette: 0.412, samples: "688 / 1029", sarRange: "0.071 to 0.075", interpretation: "Best silhouette, but coarse agricultural interpretation." },
+    { run: "Main text", k: 3, silhouette: 0.312, samples: "255 / 901", sarRange: "0.068 to 0.084", interpretation: "Chosen for interpretable crop profile zones." },
+    { run: "Sensitivity", k: 4, silhouette: 0.261, samples: "255 / 575", sarRange: "0.061 to 0.084", interpretation: "More fragmented and lower silhouette." }
   ]
 };
 
 const MAP_NOTES = {
   cluster: {
-    title: "k=3 crop-profile zones",
-    body: "Each polygon is a retained 10 km crop-profile grid cell, coloured by KMeans cluster over selected-crop proportions.",
+    title: "k=3 crop profile zones",
+    body: "Each polygon is a retained 10 km crop profile grid cell, coloured by KMeans cluster over selected crop proportions.",
     details: [
       "Zone definitions and sample counts are summarised in the fixed table above."
     ]
   },
   intensity: {
     title: "Selected crop proportion",
-    body: "This map shows selected_crop_intensity: selected crop area divided by total grid-cell area. Units are proportions of grid-cell area from 0 to 1; multiply by 100 for percent.",
+    body: "This map shows selected_crop_intensity: selected crop area divided by total grid cell area. Units are proportions of grid cell area from 0 to 1; multiply by 100 for percent.",
     details: [
       "Selected crop area is the combined UKCEH area, in hectares, for the eight analysed crops: winter wheat, winter barley, spring barley, beet, maize, oilseed rape, potatoes, and pulses/field beans/peas.",
       "The tooltip reports both selected_crop_area_ha and selected_crop_intensity so area and proportion are not conflated."
     ]
   },
   sar: {
-    title: "Zone-level SAR disagreement reduction",
-    body: "This map joins the zone-level reduction in model-reference disagreement after adding Sentinel-1 SAR to every grid cell in that zone. Units are rate-point differences: S2 disagreement rate minus S1+S2 disagreement rate.",
+    title: "Zone level SAR disagreement reduction",
+    body: "This map joins the zone level reduction in disagreement between the model and reference after adding Sentinel-1 SAR to every grid cell in that zone. Units are differences in rate points: S2 disagreement rate minus S1+S2 disagreement rate.",
     details: [
-      "Zone sample counts are held-out CROME test samples, not grid-cell counts."
+      "Zone sample counts are held out CROME test samples, not grid cell counts."
     ]
   }
 };
@@ -106,6 +136,17 @@ const COLORS = {
   muted: "#65717c",
   gold: "#d59f2f"
 };
+
+const CROP_META = [
+  { key: "winterWheat", label: "Winter wheat", color: "#477a58", text: "#ffffff" },
+  { key: "winterBarley", label: "Winter barley", color: "#c7952d", text: "#1d252c" },
+  { key: "springBarley", label: "Spring barley", color: "#6d5e9c", text: "#ffffff" },
+  { key: "beet", label: "Beet", color: "#b65a4b", text: "#ffffff" },
+  { key: "maize", label: "Maize", color: "#33658a", text: "#ffffff" },
+  { key: "oilseedRape", label: "Oilseed rape", color: "#d8b84e", text: "#1d252c" },
+  { key: "potatoes", label: "Potatoes", color: "#8a6d4a", text: "#ffffff" },
+  { key: "pulses", label: "Pulses", color: "#4e8f89", text: "#ffffff" }
+];
 
 function createSvg(width, height) {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -133,7 +174,7 @@ function renderGroupedBars(targetId, data, options = {}) {
   target.innerHTML = "";
   const width = options.width || 880;
   const height = options.height || 360;
-  const margin = { top: 28, right: 28, bottom: 76, left: 74 };
+  const margin = { top: 28, right: 28, bottom: 76, left: 88 };
   const svg = createSvg(width, height);
   target.appendChild(svg);
 
@@ -167,8 +208,16 @@ function renderGroupedBars(targetId, data, options = {}) {
   });
 
   add(svg, "line", { x1: margin.left, y1: margin.top + chartH, x2: width - margin.right, y2: margin.top + chartH, class: "chart-axis" });
+  const axisY = margin.top + chartH / 2;
+  add(svg, "text", {
+    x: 20,
+    y: axisY,
+    transform: `rotate(-90 20 ${axisY})`,
+    "text-anchor": "middle",
+    class: "chart-title-small"
+  }, "Agreement / F1 score (0 to 1)");
   addLegend(svg, width - 210, 18, [
-    { label: "S2-only", color: COLORS.s2 },
+    { label: "S2 only", color: COLORS.s2 },
     { label: "S1+S2", color: COLORS.s1s2 }
   ]);
 }
@@ -246,7 +295,7 @@ function renderRangeChart() {
     add(svg, "text", { x: x(d.max) + 10, y: y + 4, class: "chart-label" }, `mean +${fmt(d.mean)}`);
   });
 
-  add(svg, "text", { x: margin.left, y: 20, class: "chart-title-small" }, "Delta range: S1+S2 minus S2-only across paired RF settings");
+  add(svg, "text", { x: margin.left, y: 20, class: "chart-title-small" }, "Delta range: S1+S2 minus S2 only across paired RF settings");
 }
 
 function renderZoneChart() {
@@ -254,8 +303,8 @@ function renderZoneChart() {
   target.innerHTML = "";
   const data = DATA.zones;
   const width = 880;
-  const height = 310;
-  const margin = { top: 30, right: 30, bottom: 50, left: 72 };
+  const height = 330;
+  const margin = { top: 34, right: 30, bottom: 70, left: 88 };
   const svg = createSvg(width, height);
   target.appendChild(svg);
 
@@ -279,15 +328,112 @@ function renderZoneChart() {
     const s1X = cx + 6;
     add(svg, "rect", { x: s2X, y: y(d.s2Dis), width: barW, height: margin.top + chartH - y(d.s2Dis), fill: COLORS.s2, rx: 3 });
     add(svg, "rect", { x: s1X, y: y(d.s1s2Dis), width: barW, height: margin.top + chartH - y(d.s1s2Dis), fill: COLORS.s1s2, rx: 3 });
-    add(svg, "line", { x1: s2X + barW / 2, y1: y(d.s2Dis) - 8, x2: s1X + barW / 2, y2: y(d.s1s2Dis) - 8, stroke: COLORS.gain, "stroke-width": 2 });
-    add(svg, "text", { x: cx, y: y(Math.max(d.s2Dis, d.s1s2Dis)) - 18, "text-anchor": "middle", class: "chart-label" }, `-${fmt(d.reduction)}`);
-    add(svg, "text", { x: cx, y: height - margin.bottom + 28, "text-anchor": "middle", class: "chart-label" }, d.zone);
+    add(svg, "text", { x: s2X + barW / 2, y: y(d.s2Dis) - 7, "text-anchor": "middle", class: "chart-label" }, fmt(d.s2Dis));
+    add(svg, "text", { x: s1X + barW / 2, y: y(d.s1s2Dis) - 7, "text-anchor": "middle", class: "chart-label" }, fmt(d.s1s2Dis));
+    add(svg, "text", { x: cx, y: height - margin.bottom + 25, "text-anchor": "middle", class: "chart-label" }, d.zone);
+    add(svg, "text", { x: cx, y: height - margin.bottom + 44, "text-anchor": "middle", class: "chart-title-small" }, `Reduction ${fmt(d.reduction)}`);
   });
 
+  const axisY = margin.top + chartH / 2;
+  add(svg, "text", {
+    x: 20,
+    y: axisY,
+    transform: `rotate(-90 20 ${axisY})`,
+    "text-anchor": "middle",
+    class: "chart-title-small"
+  }, "Disagreement rate (0 to 1)");
   addLegend(svg, width - 200, 20, [
     { label: "S2 disagreement", color: COLORS.s2 },
     { label: "S1+S2 disagreement", color: COLORS.s1s2 }
   ]);
+}
+
+function renderZoneProfileChart() {
+  const target = document.getElementById("zone-profile-chart");
+  if (!target) return;
+  target.innerHTML = "";
+
+  const width = 880;
+  const height = 390;
+  const margin = { top: 38, right: 26, bottom: 142, left: 212 };
+  const svg = createSvg(width, height);
+  target.appendChild(svg);
+
+  const chartW = width - margin.left - margin.right;
+  const chartH = height - margin.top - margin.bottom;
+  const rowH = chartH / DATA.zones.length;
+  const barH = 38;
+  const x = value => margin.left + value * chartW;
+
+  for (let i = 0; i <= 4; i++) {
+    const value = i / 4;
+    const xx = x(value);
+    add(svg, "line", { x1: xx, y1: margin.top - 8, x2: xx, y2: height - margin.bottom, class: "chart-grid" });
+    add(svg, "text", {
+      x: xx,
+      y: height - margin.bottom + 24,
+      "text-anchor": "middle",
+      class: "chart-label"
+    }, `${Math.round(value * 100)}%`);
+  }
+
+  DATA.zones.forEach((zone, zoneIndex) => {
+    const y = margin.top + zoneIndex * rowH + (rowH - barH) / 2;
+    add(svg, "text", {
+      x: margin.left - 14,
+      y: y + 13,
+      "text-anchor": "end",
+      class: "chart-label chart-label-strong"
+    }, zone.zone);
+    add(svg, "text", {
+      x: margin.left - 14,
+      y: y + 29,
+      "text-anchor": "end",
+      class: "chart-title-small"
+    }, zone.label.replace(" zone", ""));
+
+    let cumulative = 0;
+    CROP_META.forEach(crop => {
+      const value = zone.composition[crop.key];
+      const segmentX = x(cumulative);
+      const segmentW = value * chartW;
+      add(svg, "rect", {
+        x: segmentX,
+        y,
+        width: segmentW,
+        height: barH,
+        fill: crop.color,
+        stroke: "#ffffff",
+        "stroke-width": 1
+      });
+      if (value >= 0.08) {
+        add(svg, "text", {
+          x: segmentX + segmentW / 2,
+          y: y + 24,
+          "text-anchor": "middle",
+          fill: crop.text,
+          class: "segment-label"
+        }, `${Math.round(value * 100)}%`);
+      }
+      cumulative += value;
+    });
+  });
+
+  add(svg, "text", {
+    x: margin.left,
+    y: 20,
+    class: "chart-title-small"
+  }, "Share of selected crop area");
+
+  const legendStartY = height - 80;
+  CROP_META.forEach((crop, i) => {
+    const column = i % 4;
+    const row = Math.floor(i / 4);
+    const legendX = 48 + column * 205;
+    const legendY = legendStartY + row * 26;
+    add(svg, "rect", { x: legendX, y: legendY - 11, width: 13, height: 13, fill: crop.color, rx: 2 });
+    add(svg, "text", { x: legendX + 19, y: legendY, class: "chart-label" }, crop.label);
+  });
 }
 
 function renderZoneSummaryTable() {
@@ -309,10 +455,10 @@ function renderZoneSummaryTable() {
         <tr>
           <th>Zone</th>
           <th>Meaning</th>
-          <th>Centroid crop profile</th>
+          <th>Centroid crop profile (top three)</th>
           <th class="numeric">Grid cells</th>
-          <th class="numeric">Test samples</th>
-          <th class="numeric">SAR reduction</th>
+          <th class="numeric">Zone test samples</th>
+          <th class="numeric">SAR reduction (rate points)</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
@@ -323,7 +469,7 @@ function renderZoneSummaryTable() {
 function renderKTable() {
   const target = document.getElementById("k-table");
   const rows = DATA.kSummary.map(row => `
-    <tr>
+    <tr${row.k === 3 ? ' class="is-selected"' : ""}>
       <td>${row.run}</td>
       <td class="numeric">${row.k}</td>
       <td class="numeric">${fmt(row.silhouette)}</td>
@@ -339,8 +485,8 @@ function renderKTable() {
           <th>Run</th>
           <th class="numeric">k</th>
           <th class="numeric">Silhouette</th>
-          <th class="numeric">Min./max. samples</th>
-          <th class="numeric">SAR reduction</th>
+          <th class="numeric">Zone test samples (min./max.)</th>
+          <th class="numeric">SAR reduction range (rate points)</th>
           <th>Interpretation</th>
         </tr>
       </thead>
@@ -405,11 +551,12 @@ function setupGeeApp() {
   frame.src = url.href;
 }
 
-renderGroupedBars("overall-chart", DATA.overall, { yMin: 0.68, yMax: 0.82, height: 360 });
-renderGroupedBars("ukceh-chart", DATA.ukceh, { yMin: 0.74, yMax: 0.86, height: 360 });
+renderGroupedBars("overall-chart", DATA.overall, { yMin: 0.70, yMax: 0.80, height: 360 });
+renderGroupedBars("ukceh-chart", DATA.ukceh, { yMin: 0.75, yMax: 0.85, height: 360 });
 renderHorizontalGains();
 renderRangeChart();
 renderZoneChart();
+renderZoneProfileChart();
 renderZoneSummaryTable();
 renderKTable();
 setupMapTabs();
