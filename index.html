@@ -30,13 +30,13 @@
           <h3>Overall model comparison against CROME</h3>
         </div>
         <p class="figure-definition">
-          <strong>Measures.</strong> Overall agreement is the share of all matching labels; balanced accuracy
+          <strong></strong> Overall agreement is the share of all matching labels; balanced accuracy
           averages recall across crop classes; Macro F1 gives each class equal weight; Weighted F1 weights classes by sample size.
           All scores range from 0 to 1.
         </p>
         <div id="overall-chart" class="chart-frame" role="img" aria-label="Grouped bar chart comparing Sentinel-2 only and Sentinel-1 plus Sentinel-2 metrics"></div>
         <p class="figure-reading">
-          <strong>Main reading.</strong> The gain is consistent across total, class balanced and F1 based measures,
+          <strong></strong> The gain is consistent across total, class balanced and F1 based measures,
           rather than being driven by a single headline metric.
         </p>
       </article>
@@ -45,12 +45,11 @@
           <h3>Secondary comparison against UKCEH crop labels</h3>
         </div>
         <p class="figure-definition">
-          <strong>Measure.</strong> The frozen CROME trained predictions are compared with harmonised UKCEH labels.
-          These are agreement scores against a second crop map product, not independent ground truth accuracy.
+          <strong></strong> The frozen CROME trained predictions are compared with harmonised UKCEH labels.
         </p>
         <div id="ukceh-chart" class="chart-frame" role="img" aria-label="UKCEH benchmark agreement comparison"></div>
         <p class="figure-reading">
-          <strong>Main reading.</strong> S1+S2 remains higher by about 0.070 across all four measures,
+          <strong></strong> S1+S2 remains higher by about 0.070 across all four measures,
           so the direction of improvement is not unique to the CROME comparison.
         </p>
       </article>
@@ -69,12 +68,12 @@
           <h3>Class level F1 change: S1+S2 minus S2 only</h3>
         </div>
         <p class="figure-definition">
-          <strong>Measure.</strong> Bar length is the absolute increase in class F1 after adding Sentinel-1;
+          <strong></strong> Bar length is the absolute increase in class F1 after adding Sentinel-1;
           it is not the final F1 score. Crops are ordered from largest to smallest gain.
         </p>
         <div id="class-gain-chart" class="chart-frame tall" role="img" aria-label="Horizontal bar chart of class level F1 gains"></div>
         <p class="figure-reading">
-          <strong>Main reading.</strong> Pulses gain 0.130 F1, while winter barley gains 0.024.
+          <strong></strong> Pulses gain 0.130 F1, while winter barley gains 0.024.
           Sentinel-1 adds most value where the optical only classifier was comparatively weaker.
         </p>
       </article>
@@ -93,14 +92,14 @@
           <h3>RF sensitivity: gain range across 36 paired settings</h3>
         </div>
         <p class="figure-definition">
-          <strong>Settings.</strong> The grid varies tree count (300, 500, 800), feature sampling
+          <strong>Settings:</strong> The grid varies tree count (300, 500, 800), feature sampling
           (<code>sqrt</code>, <code>log2</code>), minimum leaf size (1, 3, 5) and class weighting.
           Each line shows the minimum to maximum S1+S2 gain; the dot is the mean gain.
         </p>
         <div id="rf-chart" class="chart-frame compact" role="img" aria-label="Range chart for Random Forest sensitivity gains"></div>
         <p class="figure-reading">
-          <strong>Main reading.</strong> All 36 paired settings improve for both overall agreement and Macro F1.
-          The result supports robustness, not selection of a new best model.
+          <strong></strong> All 36 paired settings improve for both overall agreement and Macro F1.
+          
         </p>
       </article>
     </section>
@@ -118,12 +117,12 @@
           <h3>Zone level disagreement reduction</h3>
         </div>
         <p class="figure-definition">
-          <strong>Measure.</strong> Disagreement is the proportion of held out CROME samples where the model and reference label differ.
+          <strong></strong> Disagreement is the proportion of heldout CROME samples where the model and reference label differ.
           SAR reduction is S2 only disagreement minus S1+S2 disagreement, in rate points.
         </p>
         <div id="zone-chart" class="chart-frame compact" role="img" aria-label="Zone level SAR disagreement reduction chart"></div>
         <p class="figure-reading">
-          <strong>Main reading.</strong> Disagreement falls in all three zones, with the largest reduction
+          <strong></strong> Disagreement falls in all three zones, with the largest reduction
           in the mixed wheat, barley and beet zone (0.084).
         </p>
       </article>
@@ -140,7 +139,7 @@
         <h3>Zone summary</h3>
         <p class="table-intro">
           Centroid profiles are shares of the eight selected crops, not shares of total grid cell area.
-          Grid cells describe spatial support; test samples are zone totals used for disagreement estimates.
+          
         </p>
         <div id="zone-summary-table" class="data-table"></div>
       </article>
@@ -149,12 +148,12 @@
           <h3>Complete crop composition of the three zones</h3>
         </div>
         <p class="figure-definition">
-          <strong>Measure.</strong> Each bar sums to 100% and shows the cluster centroid share of selected crop area
+          <strong></strong> Each bar sums to 100% and shows the cluster centroid share of selected crop area
           across all eight analysed crops.
         </p>
         <div id="zone-profile-chart" class="chart-frame zone-profile" role="img" aria-label="One hundred percent stacked bars comparing all eight crop shares across the three crop profile zones"></div>
         <p class="figure-reading">
-          <strong>Main reading.</strong> Zone 1 is the most evenly mixed; Zone 2 shifts towards both barley types and beet;
+          <strong></strong> Zone 1 is the most evenly mixed; Zone 2 shifts towards both barley types and beet;
           Zone 3 is distinguished by winter wheat occupying more than half of selected crop area.
         </p>
       </article>
