@@ -24,7 +24,7 @@ var ZONE_NAMES = {
 };
 
 var METRICS = {
-  'Crop-profile zones': {
+  'Crop profile zones': {
     field: 'zone_id',
     type: 'zone',
     min: 1,
@@ -32,7 +32,7 @@ var METRICS = {
     palette: [COLORS.zone1, COLORS.zone2, COLORS.zone3],
     legend: ['Zone 1', 'Zone 2', 'Zone 3']
   },
-  'Selected-crop proportion of grid-cell area': {
+  'Selected crop proportion of grid cell area': {
     field: 'crop_int',
     type: 'continuous',
     min: 0,
@@ -81,19 +81,9 @@ var title = ui.Label('Crop profile and SAR added value', {
   margin: '0 0 4px 0'
 });
 
-var subtitle = ui.Label(
-  'Explore how crop composition and Sentinel-1 disagreement reduction vary across retained 10 km grid cells.',
-  {
-    fontSize: '12px',
-    color: COLORS.muted,
-    whiteSpace: 'pre-wrap',
-    margin: '0 0 14px 0'
-  }
-);
-
 var metricSelect = ui.Select({
   items: Object.keys(METRICS),
-  value: 'Crop-profile zones',
+  value: 'Crop profile zones',
   style: {stretch: 'horizontal'}
 });
 
@@ -107,7 +97,7 @@ var resetButton = ui.Button({
   label: 'Reset view',
   style: {stretch: 'horizontal'},
   onClick: function() {
-    metricSelect.setValue('Crop-profile zones', true);
+    metricSelect.setValue('Crop profile zones', true);
     zoneSelect.setValue('All zones', true);
     map.setCenter(0.8, 52.45, 8);
     setDefaultInfo();
@@ -163,15 +153,6 @@ function setDefaultInfo() {
     color: COLORS.text,
     margin: '0 0 4px 0'
   }));
-  infoPanel.add(ui.Label(
-    'The popup links local crop composition to zone-level model disagreement. Test sample counts are zone totals, not counts for an individual grid cell.',
-    {
-      fontSize: '12px',
-      color: COLORS.muted,
-      whiteSpace: 'pre-wrap',
-      margin: '0'
-    }
-  ));
 }
 
 function filteredGrid() {
@@ -294,7 +275,6 @@ map.onClick(function(coords) {
 
 var controls = ui.Panel([
   title,
-  subtitle,
   sectionLabel('Map variable'),
   metricSelect,
   sectionLabel('Zone filter'),
