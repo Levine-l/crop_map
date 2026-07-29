@@ -265,7 +265,6 @@ map.onClick(function(coords) {
     addInfoRow('Dominant crop in this cell', p.dominant + ' (' + formatPercent(p.dominant_p) + ')');
     addInfoRow('Selected crop area', formatNumber(p.crop_ha, 0) + ' ha');
     addInfoRow('Selected crop proportion of grid cell', formatPercent(p.crop_int));
-    addInfoRow('Held-out test samples in zone', String(p.test_n));
     addInfoRow('S2-only disagreement', formatPercent(p.s2_dis));
     addInfoRow('S1+S2 disagreement', formatPercent(p.s1s2_dis));
     addInfoRow('SAR reduction', formatNumber(p.sar_red, 3) + ' rate points');
