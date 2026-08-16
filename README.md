@@ -9,7 +9,6 @@ This visualisation turns main outputs from dissertation's result into figures an
 - `assets/app.js` - embedded data and SVG chart rendering.
 - `data/source_tables/` - copied CSV source outputs used to derive the embedded chart values.
 - `data/maps/` - copied k=3 Folium HTML maps used by the map preview tabs.
-- `data/DATA_INVENTORY.md` - copy of data provenance table.
 
 
 ## Figures
